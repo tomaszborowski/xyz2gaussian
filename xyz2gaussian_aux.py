@@ -198,43 +198,6 @@ def head_remove_guess(head):
     return new_head
 
 
-# First version of the head_add_chk_label() function
-# Labeled line as the first item in the list (at the beginning of the file
-
-def head_add_chk_label(head,label_digits,index):
-
-    """
-    Adding a label specifying the file number and data set number
-
-    Parameters
-    ----------
-    head : list
-    label_digits : int
-    index : int
-
-    Returns
-    -------
-    head_new : list
-        a list containing elements of a new head
-
-    """
-
-    head_new = head.copy()
-    line_withoutLabel = ', '.join([item for item in head_new if item.startswith('%Chk' or '%chk')])
-    head_new.remove(line_withoutLabel)
-
-    start_fileName = line_withoutLabel.find("=") + len("=")
-    end_filename = line_withoutLabel.find(".chk") # the file must end with a ".chk" extension
-    file_name = line_withoutLabel[start_fileName:end_filename]
-
-    label = str(index).zfill(label_digits)
-    fileName_withLabel = file_name + label
-    head_withLabel = line_withoutLabel.replace(file_name,fileName_withLabel)
-    head_new[0] = head_withLabel
-
-    return head_new
-
-
 # Second version of the head_add_chk_label() function
 # A line with a label at the position of the line to be changed
 
@@ -360,65 +323,6 @@ def gen_file_name(xyz_fileName, label_digits,index):
     return new_fileName
 
 
-# First version of the gen_new_body() function
-
-def gen_new_body(body, geo):
-
-    """
-    Combining the contents of the body list with the contents of the geo list
-
-    Parameters
-    ----------
-    body : tuples list
-    geo : tuples list
-
-    Returns
-    -------
-    newBody_list : list
-        a list consisting of geo and body lists
-
-    """
-
-    list_length = len(body)
-    newBody_list = []
-    for i in range(list_length):
-        newBody_list.append((body[i])[0] + "  " + geo[i] + "  " + (body[i])[1])
-
-    return newBody_list
-
-
-# Second version of the gen_new_body() function
-
-def gen_new_body(body, geo):
-
-    """
-    Combining the contents of the body list with the contents of the geo list
-
-    Parameters
-    ----------
-    body : tuples list
-    geo : tuples list
-
-    Returns
-    -------
-    newBody_list : list
-        a list consisting of geo and body lists
-
-    """
-
-    list_length = len(body)
-    newBody_list = []
-    for i in range(list_length):
-        if (len(body[i][1]) > 0):
-            newBody_list.append((body[i])[0] + "  " + geo[i] + "  " + (body[i])[1])
-        else:
-            newBody_list.append((body[i])[0] + "  " + geo[i])
-
-    return newBody_list
-
-
-# Third version of the gen_new_body() function
-
 def gen_new_body(body, geo):
 
     """
@@ -511,7 +415,9 @@ def div_into_files(read_file):
 
     file_output_head.write("\n".join(read_file[0:head_end_index]))
     file_output_body.write("\n".join(read_file[head_end_index:body_end_index]))
+    file_output_tail.write(" \n")
     file_output_tail.write("\n".join(read_file[body_end_index:]))
+    file_output_tail.write(" \n")
 
     file_output_head.close()
     file_output_body.close()
