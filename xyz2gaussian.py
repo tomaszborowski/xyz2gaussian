@@ -7,58 +7,33 @@ stored in a single xyz file
 Reads: #1 gaussian template input file with %Chk= line
        #2 xyz file with geometries for which input files are to be created
 
-(head_test - file (head of Gaussian input, up to and including the charge/spin line)
-body_test - file (template geometry section of the Gaussian input; xyz are later ignored)
-tail_test - file (all that needs to be in the input below the geometry))
 
 Outputs: a series of files with names based on the name of the xyz file and ending
         with a sequance number: _0XYZ.com
 
 @authors: A. Gomółka, T. Borowski
-last update: 15.01.2022
+last update: 16.01.2022
 """
 import sys
 
-from xyz2gaussian_aux import read_head_tail, read_body, read_xyz, count_lines
+from xyz2gaussian_aux import read_head_tail, read_xyz, count_lines
 from xyz2gaussian_aux import int_digits, head_remove_guess, head_add_oldchk, head_add_chk_label
 from xyz2gaussian_aux import head_change_comment, gen_file_name, gen_new_body
-from xyz2gaussian_aux import write_g_input, div_into_files
+from xyz2gaussian_aux import write_g_input, div_into_lists
 
 ### ---------------------------------------------------------------------- ###
 ### Seting the file names                                                  ###
-# head_file_name = sys.argv[1]
-# body_file_name = sys.argv[2]
-# tail_file_name = sys.argv[3]
-# xyz_file_name = sys.argv[4]
-
-### Seting the file names - wczytywanie danych z głównego pliku inputowego
 main_file_name = sys.argv[1]
 xyz_file_name = sys.argv[2]
-head_file_name = 'head_test'
-body_file_name = 'body_test'
-tail_file_name = 'tail_test'
-
-main_file = open(main_file_name, 'r')
-main_file_content = read_head_tail(main_file)
-div_into_files(main_file_content) # writing 'head_test', 'body_test' and 'tail_test' files
-main_file.close()
-
 
 ### ---------------------------------------------------------------------- ###
 ### reading head, body, tail
-head_f = open(head_file_name, 'r')
-head = read_head_tail(head_f)
-head_f.close()
+main_file = open(main_file_name, 'r')
+main_file_content = read_head_tail(main_file)
+head, body, tail = div_into_lists(main_file_content)
+main_file.close()
 
-body_f = open(body_file_name, 'r')
-body = read_body(body_f)
-n_lines_body = count_lines(body_f)
-body_f.close()
-
-tail_f = open(tail_file_name, 'r')
-tail = read_head_tail(tail_f)
-tail_f.close()
-
+n_lines_body = len(body)
 
 ### ---------------------------------------------------------------------- ###
 ### check consistency between body and xyz file content, calculate number

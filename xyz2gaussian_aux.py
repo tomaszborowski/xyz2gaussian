@@ -3,9 +3,8 @@
 """
 A collection of functions for xyz2gaussian
 
-Created on Thu Sep  2 08:32:04 2021
-
 @authors: A. Gomółka, T. Borowski
+last update: 16.01.2022
 """
 import math, re
 
@@ -13,12 +12,9 @@ import math, re
 Note: 
 For the head_add_chk_label() and head_add_oldchk() functions - the file must end with a ".chk" extension
 '''
-'''
-print(function_name._doc_) - displaying docstring documentation for the function named "function name"
-'''
+
 
 def count_lines(file):
-
     """
     Counts number of lines in a file
 
@@ -31,7 +27,6 @@ def count_lines(file):
     i: int
         number of lines in a file
     """
-
     file.seek(0)
     i = -1
     for i, l in enumerate(file):
@@ -42,7 +37,6 @@ def count_lines(file):
 
 
 def int_digits(n):
-
     """
     For a positive integer n returns its number of digits
 
@@ -56,13 +50,11 @@ def int_digits(n):
             number of digits
 
     """
-
     digits = int(math.log10(n))+1
     return digits
 
 
 def read_head_tail(file):
-
     """
     Reading the contents of a file
 
@@ -76,7 +68,6 @@ def read_head_tail(file):
             a list containing the following lines of the file
 
     """
-
     file.seek(0)
     line = file.read()   # this line reads the entire file
     split_line = line.splitlines()
@@ -86,7 +77,6 @@ def read_head_tail(file):
 
 
 def read_xyz(file):
-
     """
     Listing x, y and z coordinates
 
@@ -104,7 +94,6 @@ def read_xyz(file):
         a list with x, y and z coordinates
 
     """
-
     comment = ""
     numberOfatoms  = int(file.readline())
     comment = file.readline() # taking a comment
@@ -127,7 +116,6 @@ def read_xyz(file):
 
 
 def read_body(file):
-
     """
     Listing all data except for coordinates x, y and z
 
@@ -141,7 +129,6 @@ def read_body(file):
         a list of tuples containing all data except x, y and z
 
     """
-
     file.seek(0)
     body = []
     n_lines = count_lines(file)
@@ -173,7 +160,6 @@ def read_body(file):
 
 
 def head_remove_guess(head):
-
     """
     Removing "guess = read" expression from head
 
@@ -187,7 +173,6 @@ def head_remove_guess(head):
         a list containing elements of a new head
 
     """
-
     head_new = head.copy()
     new_head = []
     for i in head_new:
@@ -198,11 +183,7 @@ def head_remove_guess(head):
     return new_head
 
 
-# Second version of the head_add_chk_label() function
-# A line with a label at the position of the line to be changed
-
 def head_add_chk_label(head,label_digits,index):
-
     """
     Adding a label specifying the file number and data set number
 
@@ -218,7 +199,6 @@ def head_add_chk_label(head,label_digits,index):
         a list containing elements of a new head
 
     """
-
     head_new = head.copy()
     line_withoutLabel = ', '.join([item for item in head_new if item.startswith('%Chk' or '%chk')])
     index_line_withoutLabel = head_new.index(line_withoutLabel)
@@ -236,7 +216,6 @@ def head_add_chk_label(head,label_digits,index):
 
 
 def head_add_oldchk(head,label_digits,index):
-
     """
     Adding a label specifying the previous file number with the phrase "Old"
 
@@ -252,7 +231,6 @@ def head_add_oldchk(head,label_digits,index):
         a list containing elements of a new head
 
     """
-
     head_new = head.copy()
     head_firstLine = ', '.join([item for item in head_new if item.startswith('%Chk' or '%chk')])
     head_new = head_add_chk_label(head_new, label_digits, index) # head z label
@@ -273,7 +251,6 @@ def head_add_oldchk(head,label_digits,index):
 
 
 def head_change_comment(head, comm_line):
-
     """
     Adding a comment in place of the word "test"
 
@@ -288,7 +265,6 @@ def head_change_comment(head, comm_line):
         a list containing elements of a new head
 
     """
-
     new_head = head.copy()
     new_head[-3] = comm_line
 
@@ -296,7 +272,6 @@ def head_change_comment(head, comm_line):
 
 
 def gen_file_name(xyz_fileName, label_digits,index):
-
     """
     Generating a file name - adding a label and changing the extension
 
@@ -312,7 +287,6 @@ def gen_file_name(xyz_fileName, label_digits,index):
         a string that specifies the new file name
 
     """
-
     start_fileName = 0
     end_filename = xyz_fileName.find(".xyz")
     new_fileName = xyz_fileName[start_fileName:end_filename]
@@ -324,7 +298,6 @@ def gen_file_name(xyz_fileName, label_digits,index):
 
 
 def gen_new_body(body, geo):
-
     """
     Combining the contents of the body list with the contents of the geo list
 
@@ -339,7 +312,6 @@ def gen_new_body(body, geo):
         a list consisting of geo and body lists
 
     """
-
     list_length = len(body)
     newBody_list = []
     newBody = ""
@@ -355,7 +327,6 @@ def gen_new_body(body, geo):
 
 
 def write_g_input(out_file_name, head_new, body_new, tail):
-
     """
     Create a file with specific content
 
@@ -371,7 +342,6 @@ def write_g_input(out_file_name, head_new, body_new, tail):
     Specified file containing head, body, x, y and z coordinates, and tail
 
     """
-
     file_output = open(out_file_name, 'w')
 
     for part in [head_new, body_new, tail]:
@@ -381,10 +351,11 @@ def write_g_input(out_file_name, head_new, body_new, tail):
     file_output.close()
 
 
-def div_into_files(read_file):
+    
+def div_into_lists(read_file):
 
     """
-    Dividing the main,input file into smaller files named head, body, and tail
+    Dividing the main input file into 3 lists: head, body, and tail
 
     Parameters
     ----------
@@ -392,16 +363,12 @@ def div_into_files(read_file):
 
     Returns
     -------
-    Files containing head, body and tail
+    lists : head, body, tail
 
     """
-
     blankLine_counter = 0
     head_end_index = 0
     body_end_index = 0
-    file_output_head = open('head_test', 'w')
-    file_output_body = open('body_test', 'w')
-    file_output_tail = open('tail_test', 'w')
 
     for i, var in enumerate(read_file):
 
@@ -413,12 +380,39 @@ def div_into_files(read_file):
                 body_end_index = i + 1  # the beginning of the tail (index)
                 break
 
-    file_output_head.write("\n".join(read_file[0:head_end_index]))
-    file_output_body.write("\n".join(read_file[head_end_index:body_end_index]))
-    file_output_tail.write(" \n")
-    file_output_tail.write("\n".join(read_file[body_end_index:]))
-    file_output_tail.write(" \n")
+    head = ("\n".join(read_file[0:head_end_index]))
+    tail = " \n"
+    tail = tail + ("\n".join(read_file[body_end_index:]))
+    tail = tail + " \n"
 
-    file_output_head.close()
-    file_output_body.close()
-    file_output_tail.close()
+    head = head.splitlines()
+    tail = tail.splitlines()
+    
+    body = []
+    split_lines = read_file[head_end_index:body_end_index]
+    n_lines = len(split_lines)
+
+    split_line = split_lines[0].split()
+
+    index_floatList = []
+    for i, variable in enumerate(split_line):
+        if ((re.match("^[-]?([0-9]+([.][0-9]*)?|[.][0-9]+)$", variable)) or (re.match("^[-]?[0-9]+$", variable))):
+            index_floatList.append(i)
+
+    ints = [int(x) for x in index_floatList]
+
+    if (len(index_floatList) == 4):
+        ints.pop(0)
+
+    for i in range(n_lines-1):
+        bodyStringRight = ""
+        bodyStringLeft = ""
+        bodyStringLeft = "  ".join(split_line[:ints[0]])
+        bodyStringRight = "  ".join(split_line[(ints[2] + 1):])
+
+        body.append(tuple([bodyStringLeft,bodyStringRight]))
+        split_line = split_lines[i]
+        split_line = split_line.split()   
+    
+    return head, body, tail
+    
