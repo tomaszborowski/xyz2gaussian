@@ -11,7 +11,7 @@ Reads: #1 gaussian template input file with %Chk= line
 Outputs: a series of files with names based on the name of the xyz file and ending
         with a sequance number: _0XYZ.com
 
-@authors: A. Gomółka, T. Borowski
+@authors: A. Gomółka, Z. Wojdyla, T. Borowski
 last update: 16.01.2022
 """
 import sys

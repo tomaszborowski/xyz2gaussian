@@ -3,8 +3,8 @@
 """
 A collection of functions for xyz2gaussian
 
-@authors: A. Gomółka, T. Borowski
-last update: 16.01.2022
+@authors: A. Gomółka, Z. Wojdyla, T. Borowski
+last update: 3.02.2022
 """
 import math, re
 
@@ -105,10 +105,10 @@ def read_xyz(file):
     for j in range(numberOfatoms):
         floatString = ""
 
-        split_line = file.readline()
-        split_line = split_line.split()
-        split_line = split_line[1:]
-        floatString = "  ".join(split_line)
+        line = file.readline()
+        split_line = line.split()
+        split_line = ['{:10.6f}'.format(float(x)) for x in split_line[1:]]
+        floatString = "   ".join(split_line)
 
         geo.append(floatString)
 
@@ -148,8 +148,8 @@ def read_body(file):
     for _ in range(n_lines):
         bodyStringRight = ""
         bodyStringLeft = ""
-        bodyStringLeft = "  ".join(split_line[:ints[0]])
-        bodyStringRight = "  ".join(split_line[(ints[2] + 1):])
+        bodyStringLeft = "\t".join(split_line[:ints[0]])
+        bodyStringRight = "\t".join(split_line[(ints[2] + 1):])
 
         body.append(tuple([bodyStringLeft,bodyStringRight]))
         split_line = file.readline()
@@ -317,9 +317,9 @@ def gen_new_body(body, geo):
     newBody = ""
     for i in range(list_length):
         if (len(body[i][1]) > 0):
-            newBody = body[i][0] + "  " + geo[i] + "  " + body[i][1]
+            newBody = body[i][0] + "\t" + geo[i] + "\t" + body[i][1]
         else:
-            newBody = body[i][0] + "  " + geo[i]
+            newBody = body[i][0] + "\t" + geo[i]
         newBody_list.append(newBody)
 
     return newBody_list
@@ -372,7 +372,7 @@ def div_into_lists(read_file):
 
     for i, var in enumerate(read_file):
 
-        if (read_file[i] == ''):
+        if (read_file[i].strip() == ''):
             blankLine_counter += 1
             if (blankLine_counter == 2):
                 head_end_index = i + 2  # the beginning of the body (index)
@@ -404,11 +404,11 @@ def div_into_lists(read_file):
     if (len(index_floatList) == 4):
         ints.pop(0)
 
-    for i in range(n_lines-1):
+    for i in range(1,n_lines):
         bodyStringRight = ""
         bodyStringLeft = ""
-        bodyStringLeft = "  ".join(split_line[:ints[0]])
-        bodyStringRight = "  ".join(split_line[(ints[2] + 1):])
+        bodyStringLeft = "\t".join(split_line[:ints[0]])
+        bodyStringRight = "\t".join(split_line[(ints[2] + 1):])
 
         body.append(tuple([bodyStringLeft,bodyStringRight]))
         split_line = split_lines[i]
