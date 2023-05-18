@@ -4,7 +4,7 @@
 A collection of functions for xyz2gaussian
 
 @authors: A. Gomółka, Z. Wojdyla, T. Borowski
-last update: 3.02.2022
+last update: 18.05.2023
 """
 import math, re
 
@@ -415,4 +415,18 @@ def div_into_lists(read_file):
         split_line = split_line.split()   
     
     return head, body, tail
+
+def print_help():  
+    help_text = """
+    A script to generate a series of Gaussian input files for a series of geometries
+    stored in a single xyz file
+
+    Reads: #1 gaussian template input file with %Chk= line
+           #2 xyz file with geometries for which input files are to be created
+
+
+    Outputs: a series of files with names based on the name of the xyz file and ending
+            with a sequence number: _0XYZ.com
+    """
     
+    print(help_text)    

@@ -9,22 +9,44 @@ Reads: #1 gaussian template input file with %Chk= line
 
 
 Outputs: a series of files with names based on the name of the xyz file and ending
-        with a sequance number: _0XYZ.com
+        with a sequence number: _0XYZ.com
 
 @authors: A. Gomółka, Z. Wojdyla, T. Borowski
-last update: 16.01.2022
+last update: 18.05.2023
 """
 import sys
 
 from xyz2gaussian_aux import read_head_tail, read_xyz, count_lines
 from xyz2gaussian_aux import int_digits, head_remove_guess, head_add_oldchk, head_add_chk_label
 from xyz2gaussian_aux import head_change_comment, gen_file_name, gen_new_body
-from xyz2gaussian_aux import write_g_input, div_into_lists
+from xyz2gaussian_aux import write_g_input, div_into_lists, print_help
 
 ### ---------------------------------------------------------------------- ###
 ### Seting the file names                                                  ###
-main_file_name = sys.argv[1]
-xyz_file_name = sys.argv[2]
+sys_argv_len = len(sys.argv)
+if sys_argv_len > 1:
+    main_file_name = sys.argv[1]
+else:
+    main_file_name = None
+if sys_argv_len > 2:
+    xyz_file_name = sys.argv[2]
+else:
+    xyz_file_name = None
+    
+
+### if -h - write help and exit                                            ###
+if main_file_name == "-h":
+    print_help()
+    sys.exit(1)
+
+if main_file_name == None:
+    print("gaussian template input file not found \n")
+    sys.exit(1)
+
+if xyz_file_name == None:
+    print("xyz file with geometries not found \n")
+    sys.exit(1)
+
 
 ### ---------------------------------------------------------------------- ###
 ### reading head, body, tail
